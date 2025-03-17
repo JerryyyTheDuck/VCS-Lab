@@ -16,13 +16,11 @@ class Users(Base):
 
 class Database:
     def __init__(self):
-        # Initialize the database engine and session
         self.engine = create_engine("sqlite:///./user.db", echo=False)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
 
-        # Create admin user if it doesn't exist
         self._create_admin_user()
 
     def _create_admin_user(self):
