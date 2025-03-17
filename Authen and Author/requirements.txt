@@ -1,0 +1,6 @@
+Flask
+pillow
+reportlab
+PyJWT
+bcrypt
+SQLAlchemy
