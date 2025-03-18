@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/login.css">
+    <script src="jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/js/login.js"></script>
     <title>Login</title>
 </head>
 <body>
@@ -34,53 +36,39 @@
             </div>
         </div>
     </div>
-
     <?php
         session_start();
+        include '../assets/php_process/connect_database.php';
 
-        include 'connect_database.php';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['user']) && isset($_POST['pass'])) {
+                $user = $_POST['user'];
+                $pass = $_POST['pass'];
+                
+                try {
+                    $stmt = $conn->prepare("SELECT * FROM account WHERE username = ?");
+                    $stmt->bind_param("s", $user);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
-        if(isset($_POST['user']) && isset($_POST['pass'])) {
-            $user = $_POST['user'];
-            $pass = $_POST['pass'];
-            $conn = new mysqli('localhost', 'root', '', 'login');
-            $sql = "SELECT * FROM account WHERE user = '$user' AND pass = '$pass'";
-            $result = $conn->query($sql);
-            if($result->num_rows > 0) {
-                echo "
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Login Successful!',
-                        text: 'You have logged in successfully.',
-                        confirmButtonText: 'OK'
-                    });
-                </script>";
-            } else {
-                echo "
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Login Failed',
-                        text: 'Invalid username or password.',
-                        confirmButtonText: 'Try Again'
-                    });
-                </script>";
-                header('Location: login.php');
-                exit();
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        if (trim($pass) === trim($row['pass'])) {
+                            $_SESSION['user'] = $user;
+                            $_SESSION['is_teacher'] = $row['is_teacher'];
+                            $_SESSION['loggedin'] = true;
+                            echo '<script>location.href="home.php";</script>';
+                            exit();
+                        } else {
+                            echo 'invalid_password';
+                        }
+                    } else {
+                        echo 'invalid_username';
+                    }
+                } catch (Exception $e) {
+                    echo 'database_error';
+                }
             }
-        } else {
-            echo "
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: 'Invalid username or password.',
-                    confirmButtonText: 'Try Again'
-                });
-            </script>";
-            header('Location: login.php');
-            exit();
         }
     ?>
 </body>
