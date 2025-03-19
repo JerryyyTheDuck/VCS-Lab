@@ -17,14 +17,12 @@ function select_all_student(){
   return $stmt->get_result();
 }
 
-
 function select_all_teacher(){
   global $conn;
   $stmt = $conn->prepare("SELECT * FROM info WHERE username IN (SELECT username FROM account WHERE is_teacher = 1)");
   $stmt->execute();
   return $stmt->get_result();
 }
-
 
 function select_someone($username){
   global $conn;
@@ -58,21 +56,21 @@ function update_password($username, $password) {
   }
 }
 
-function update_info($username, $real_name, $phone, $email) {
+function update_info($username, $real_name, $phone, $email, $image) {
   global $conn;
 
   if ($_SESSION['is_teacher']) {
-      $stmt = $conn->prepare("UPDATE info SET real_name = ?, phone = ?, email = ? WHERE username = ?");
+      $stmt = $conn->prepare("UPDATE info SET real_name = ?, phone = ?, email = ?, avatar = ? WHERE username = ?");
       if (!$stmt) {
           die("Prepare failed: " . $conn->error);
       }
-      $stmt->bind_param("ssss", $real_name, $phone, $email, $username);
+      $stmt->bind_param("sssss", $real_name, $phone, $email, $image, $username);
   } else {
-      $stmt = $conn->prepare("UPDATE info SET phone = ?, email = ? WHERE username = ?");
+      $stmt = $conn->prepare("UPDATE info SET phone = ?, email = ?, avatar = ? WHERE username = ?");
       if (!$stmt) {
           die("Prepare failed: " . $conn->error);
       }
-      $stmt->bind_param("sss", $phone, $email , $username);
+      $stmt->bind_param("ssss", $phone, $email , $image,$username);
   }
 
   if ($stmt->execute()) {

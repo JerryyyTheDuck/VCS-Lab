@@ -163,7 +163,11 @@
                         <div class="symbol symbol-100px symbol-lg-160px">
                             <div class="avatar">
                                 <?php
-                                    echo '<img src="../assets/img/' . $user['avatar'] . '" alt="Student" class="img-thumbnail" />';
+                                    if ($user['avatar'] != null) {
+                                        echo '<img src="../assets/img/' . $user['avatar'] . '" alt="Student" class="img-thumbnail" />';
+                                    } else {
+                                        echo '<img src="../assets/img/default.png" alt="Student" class="img-thumbnail" />';
+                                    }
                                 ?>
                             </div>
                         </div>

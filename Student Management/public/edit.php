@@ -71,13 +71,19 @@
                         <div class="col-md-9">
                             <div class="d-flex align-items-center">
                                 <div class="me-3">
-                                    <img src="../assets/img/default.png" id="profile-picture" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" />
+                                    <?php
+                                    if ($user['avatar'] != null) {
+                                        echo '<img src="../assets/img/' . $user['avatar'] . '" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" />';
+                                    } else {
+                                        echo '<img src="../assets/img/default.png" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" />';
+                                    }
+                                    ?>
                                 </div>
                                 <div>
                                     <input
                                         type="file"
-                                        name="profilePicture"
-                                        id="profilePicture"
+                                        name="profile-picture"
+                                        id="profile-picture"
                                         class="form-control"
                                         accept="image/*"
                                         onchange="previewImage(event)"
