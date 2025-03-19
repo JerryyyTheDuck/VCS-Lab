@@ -8,21 +8,18 @@ function showLoginError(message) {
     });
 }
 
-// Function to handle form submission
 function handleLoginFormSubmission(event) {
-    event.preventDefault(); // Prevent the form from submitting normally
+    event.preventDefault();
 
     const formData = new FormData(event.target);
     const user = formData.get('user');
     const pass = formData.get('pass');
 
-    // Validate inputs
     if (!user || !pass) {
         showLoginError('Please fill in all fields.');
         return;
     }
 
-    // Send data to the server using Fetch API
     fetch('login.php', {
         method: 'POST',
         body: formData

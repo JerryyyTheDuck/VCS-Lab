@@ -8,35 +8,6 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['loggedin'])) {
     exit();
 }
 
-
-$stmt = $conn->prepare("SELECT * FROM info WHERE username = ?");
-$stmt->bind_param("s", $_SESSION['user']);
-$stmt->execute();
-$userResult = $stmt->get_result();
-$user = $userResult->fetch_assoc();
-
-$stmt = $conn->prepare("SELECT * FROM info WHERE username IN (SELECT username FROM account WHERE is_teacher = 0)");
-$stmt->execute();
-$studentsResult = $stmt->get_result();
-$students = [];
-
-
-while ($row = $studentsResult->fetch_assoc()) {
-    $students[] = $row;
-}
-
-$stmt = $conn->prepare("SELECT * FROM account WHERE is_teacher = 1");
-$stmt->execute();
-$teachersResult = $stmt->get_result();
-$teachers = [];
-while ($row = $teachersResult->fetch_assoc()) {
-    $teachers[] = $row;
-}
-
-
-$conn->close();
-
-
 function split_name($name){
     $names = array();
     $names = explode(" ", $name);
@@ -62,6 +33,22 @@ function split_name($name){
 
 
     return [$fist_name, $middle_name, $last_name, $name];
+}
+
+
+$user = select_someone($_SESSION['user']);
+
+
+$studentsResult = select_all_student();
+$students = [];
+while ($row = $studentsResult->fetch_assoc()) {
+    $students[] = $row;
+}
+
+$teachersResult = select_all_teacher();
+$teachers = [];
+while ($row = $teachersResult->fetch_assoc()) {
+    $teachers[] = $row;
 }
 
 ?>

@@ -1,6 +1,5 @@
 <?php
-    include '../assets/php_process/home_utils.php';
-    include '../assets/php_process/profile_utils.php';
+    include_once '../assets/php_process/view_profile_utils.php';
 ?>
 
 <!DOCTYPE html>
@@ -199,9 +198,13 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="d-flex my-4">
-                                <a class="btn btn-sm btn-primary me-3" href="edit.php">Update Profile</a>
-                            </div>
+                            <?php
+                                if ($_SESSION['is_teacher']) {
+                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="edit.php">Update Profile</a></div>';
+                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="edit.php">Delete Profile</a></div>';
+                                }
+                            ?>
+
                         </div>
                     </div>
                 </div>

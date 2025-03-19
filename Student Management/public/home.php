@@ -92,17 +92,20 @@
                               <tbody>';
                         $count = 1;
                         foreach ($students as $student) {
-                            list($first_name, $middle_name, $last_name, $name) = split_name($student['real_name']);
-                            echo '<tr class="">
-                                    <td>' . $count . '</td>
-                                    <td class="fw-bold text-primary">' . $student['username'] . '</td>
-                                    <td class="fw-semibold">' . $first_name . '</td>
-                                    <td class="fw-semibold">' . $middle_name . '</td>
-                                    <td class="fw-semibold">' . $last_name . '</td>
-                                    <td class="fw-semibold">' . $name . '</td>
-                                  </tr>';
-                            $count++;
-                        }
+                          list($first_name, $middle_name, $last_name, $name) = split_name($student['real_name']);
+                      
+                          echo '<tr class="">
+                                  <td>' . $count . '</td>
+                                  <td class="fw-bold text-primary">
+                                      <a href="view_profile.php?name=' . $student['username'] . '"style="text-decoration:none;" >' . $student['username'] . '</a>
+                                  </td>
+                                  <td class="fw-semibold">' . $first_name . '</td>
+                                  <td class="fw-semibold">' . $middle_name . '</td>
+                                  <td class="fw-semibold">' . $last_name . '</td>
+                                  <td class="fw-semibold">' . $name . '</td>
+                                </tr>';
+                          $count++;
+                      }
                         echo '</tbody>';
                     } else {
                         echo '<h3>No student found</h3>';
@@ -138,7 +141,10 @@
                             list($first_name, $middle_name, $last_name, $real_name) = split_name($teacher['real_name']);
                             echo '<tr class="">
                                     <td>' . $count . '</td>
-                                    <td class="fw-bold text-primary">' . $teacher['username'] . '</td>
+                                    <td class="fw-bold text-primary">
+                                      <a href="view_profile.php?name=' . $teacher['username'] . '"style="text-decoration:none;" >' . $teacher['username'] . '</a>
+                                  </td>
+
                                     <td class="fw-semibold">' . $first_name . '</td>
                                     <td class="fw-semibold">' . $middle_name . '</td>
                                     <td class="fw-semibold">' . $last_name . '</td>

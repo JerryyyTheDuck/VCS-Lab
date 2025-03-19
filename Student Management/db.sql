@@ -25,8 +25,8 @@ INSERT INTO account (username, pass, is_teacher) VALUES
 ('bob_jones', 'securepass987', false),
 ('mary_williams', 'mysecretpass', true),
 ('susan_lee', '1234567890', false),
-('admin', 'admin', true);
-
+('admin', 'admin', true),
+('test', 'test', false);
 
 INSERT INTO info (username, real_name, email, phone, avatar) VALUES
 ('john_doe', 'John Doe', 'john.doe@example.com', '555-1234', 'default.png'),
@@ -34,5 +34,5 @@ INSERT INTO info (username, real_name, email, phone, avatar) VALUES
 ('bob_jones', 'Bob Jones', 'bob.jones@example.com', '555-8765', 'default.png'),
 ('mary_williams', 'Mary Williams', 'mary.williams@university.edu', '555-4321', 'default.png'),
 ('susan_lee', 'Susan Lee', 'susan.lee@example.com', '555-9876', 'default.png'), 
-('admin', 'Admin', 'admin@gmail.com', '555-0000', 'default.png');
-
+('admin', 'Admin', 'admin@gmail.com', '555-0000', 'default.png'),
+('test', 'Test', 'test@test.com', '555-1111', 'default.png');
