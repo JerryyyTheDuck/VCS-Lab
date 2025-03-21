@@ -36,6 +36,15 @@ create table student_submits(
     foreign key(student_id) references info(id) on delete cascade
 );
 
+create table note(
+    id varchar(20) default uuid() primary key,
+    user_sent varchar(20),
+    user_receive varchar(20),
+    content nvarchar(max),
+    foreign key(user_sent) references account(username) on delete cascade,
+    foreign key(user_receive) references account(username) on delete cascade
+);
+
 INSERT INTO account (username, pass, is_teacher) VALUES
 ('john_doe', 'password123', false),
 ('alice_smith', 'alice2025', true),
