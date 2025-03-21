@@ -6,8 +6,6 @@
         header('Location: login.php');
         exit();
     }
-    $user = select_someone($_SESSION['user']);
-
 
     function return_default_value($field, $username, $is_admin) {
         if ($is_admin == 1) {
@@ -41,16 +39,34 @@
             }
         }
     }
+
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if ($_SESSION['is_teacher'] != 1 && $_GET['user'] !== $_SESSION['user']) {
+            if ($_GET['user'] !== $_SESSION['user']) {
+                header('Location: ../public/edit.php?user=' . $_SESSION['user']);
+                exit();
+            }
+        }
+    
+        if (isset($_GET['user'])) {
+            $user = select_someone($_GET['user']);
+            if ($user === null) {
+                echo "<script>location.href = '../public/edit.php?user=" . $_SESSION['user'] . "';</script>";
+                exit();
+            }
+        }
+    }
+    
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        
         $name = htmlspecialchars($_POST['real_name'] ?? '');
         $username = htmlspecialchars($_POST['username'] ?? '');
         $phone = htmlspecialchars($_POST['phone'] ?? '');
         $email = htmlspecialchars($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $re_password = $_POST['confirm_password'] ?? '';
-
+        $user = select_someone($username);
         if (isset($_FILES['profile-picture'])) {
             $profile_picture = $_FILES['profile-picture'];
             $profile_picture_name = $profile_picture['name'];
@@ -65,22 +81,22 @@
             if (in_array($profile_picture_actual_ext, $allowed)) {
                 if ($profile_picture_error === 0) {
                     if ($profile_picture_size < 10000000) { 
-                        $profile_picture_name_new = uniqid('', true) . "." . $profile_picture_actual_ext;
+                        $profile_picture_name_new = $user['username'] . "." . $profile_picture_actual_ext;
                         $profile_picture_destination = '../img/' . $profile_picture_name_new;
                         move_uploaded_file($profile_picture_tmp, $profile_picture_destination);
                     } else {
                         echo 'file_too_big';
-                        header('Location: ../../public/edit.php');
+                        header('Location: ../../public/edit.php?user='.$user['username']);
                         exit();
                     }
                 } else {
                     echo 'upload_error';
-                    header('Location: ../../public/edit.php');
+                    header('Location: ../../public/edit.php?user='.$user['username']);
                     exit();
                 }
             } else {
                 echo 'invalid_file_type';
-                header('Location: ../../public/edit.php');
+                header('Location: ../../public/edit.php?user='.$user['username']);
                 exit();
             }
         }
@@ -111,12 +127,12 @@
         }
 
         if ($password != '' && $password === $re_password) {
-            update_password($_SESSION['user'], $password);
-            update_info($_SESSION['user'], $name, $phone, $email, $profile_picture_name_new);
+            update_password($user['username'], $password);
+            update_info($user['username'], $name, $phone, $email, $profile_picture_name_new);
         }else {
-            update_info($_SESSION['user'], $name, $phone, $email, $profile_picture_name_new);
+            update_info($user['username'], $name, $phone, $email, $profile_picture_name_new);
         }
-        header('Location: ../../public/edit.php');
+        header('Location: ../../public/edit.php?user='.$user['username']);
         exit();
     }
     

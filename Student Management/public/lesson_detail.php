@@ -1,0 +1,140 @@
+<?php
+    include '../assets/php_process/lesson_utils.php';
+    include_once '../assets/php_process/connect_database.php';
+
+    if (!isset($_SESSION['user']) || !isset($_SESSION['loggedin'])) {
+        header('Location: login.php');
+        exit();
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $course_id = $_GET['course_id'];
+        $course = get_course($course_id);
+        if ($course == null) {
+            header('Location: lesson.php');
+            exit();
+        }
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Management</title>
+
+    <!-- External CSS and Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/js/lesson_detail.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="avatar">
+            <?php
+                if ($user['avatar'] != null) {
+                    echo '<img src="../assets/img/' . $user['avatar'] . '" />';
+                } else {
+                    echo '<img src="../assets/img/default.png" />';
+                }
+            ?>
+        </div>
+        
+        <h2>
+            <?php echo $user['real_name'] ?? $user['username']; ?>
+        </h2>
+
+        <?php
+            if ($_SESSION['is_teacher'] == '1') {
+                echo '<button><a href="admin.php" class="active"><i class="fas fa-user-shield"></i> Admin</a></button>';
+            }
+        ?>
+
+        <button><a href="home.php" class="active"><i class="fas fa-home"></i> Home</a></button>
+        <button><a href="profile.php"><i class="fas fa-user"></i> Profile</a></button>
+        <button><a href="lesson.php"><i class="fas fa-book"></i> Lesson</a></button>
+        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Lesson Management</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Details -->
+        <div class="teacher-list">
+            <h2><i class="fas fa-chalkboard-teacher"></i> <?php echo $course['course_name']; ?></h2>
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <!-- Task Description Section -->
+                        <div class="mb-5">
+                            <h4 class="mb-3 text-primary"><i class="fas fa-tasks me-2"></i> Task Description</h4>
+                            <div class="bg-light p-4 rounded">
+                                <p class="mb-0"><?php echo htmlspecialchars($course['description']); ?></p>
+                            </div>
+                        </div>
+
+                        <!-- Attachment Section -->
+                        <div>
+                            <h4 class="mb-3 text-primary"><i class="fas fa-paperclip me-2"></i> Attachment</h4>
+                            <div class="bg-light p-4 rounded">
+                                <?php if ($course['attachment'] != null): ?>
+                                    <a href="../courses/<?php echo htmlspecialchars($course['course_name']); ?>/<?php echo htmlspecialchars($course['attachment']); ?>" 
+                                       class="btn btn-outline-primary btn-sm" 
+                                       download>
+                                        <i class="fas fa-download me-2"></i>
+                                        <?php echo htmlspecialchars($course['attachment']); ?>
+                                    </a>
+                                <?php else: ?>
+                                    <p class="mb-0 text-muted">No attachment</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-list">
+            <h2><i class="fas fa-book"></i> Submission</h2>
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="bg-light p-4 rounded">
+                            <?php if ($_SESSION['is_teacher'] != 1): ?>
+                              <form id="submit" method="post" action="../assets/php_process/lesson_utils.php" enctype="multipart/form-data">
+                                  <div class="form-group row mb-4">
+                                      <div class="col-md-9">
+                                          <div class="d-flex align-items-center">
+                                              <input type="hidden" name="course_id" value="<?php echo htmlspecialchars($_GET['course_id']); ?>" />
+                                              <div style="display: flex; justify-content: space-between; width: 100%;">
+                                                  <input type="file" name="submission" id="submission" class="form-control" />
+                                                  <button type="submit" name="submit" class="btn btn-primary" style="margin-left: 10%;">Create</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </form>
+                            <?php else: ?>
+                                
+                                <!-- For teachers, you can place any additional content here -->
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

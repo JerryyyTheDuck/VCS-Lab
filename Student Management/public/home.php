@@ -72,7 +72,15 @@
     <h3 class="text-gray-800 fw-bold mb-4">VCS Passport - Incident Response</h3>
     
     <div class="student-list">
-      <h2><i class="fas fa-graduation-cap"></i> Students</h2>
+      <h2><i class="fas fa-graduation-cap"></i> Students
+
+      <?php
+        if ($_SESSION['is_teacher'] == '1') {
+            echo '<a class="btn btn-sm btn-primary me-3" style="margin-left: auto;" href="create.php">Create New Users</a>';
+        }
+      ?>
+      </h2>
+
       <div class="card">
         <div class="card-body">
             <div class="table-responsive">

@@ -200,11 +200,10 @@
                             </div>
                             <?php
                                 if ($_SESSION['is_teacher']) {
-                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="edit.php">Update Profile</a></div>';
-                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="edit.php">Delete Profile</a></div>';
+                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="../assets/php_process/view_profile_utils.php?name=' . $user['username'] . '&status=update">Update Profile</a></div>';
+                                    echo '<div class="d-flex my-4"><a class="btn btn-sm btn-primary me-3" href="../assets/php_process/view_profile_utils.php?name=' . $user['username'] . '&status=delete">Delete Profile</a></div>';
                                 }
                             ?>
-
                         </div>
                     </div>
                 </div>

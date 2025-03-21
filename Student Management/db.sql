@@ -14,10 +14,27 @@ create table info(
     email varchar(255),
     phone varchar(15),
     avatar varchar(100) default 'default.png',
-    foreign key(username) references account(username)
+    foreign key(username) references account(username) on delete cascade
+);
+
+CREATE TABLE course (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()), 
+    course_name NVARCHAR(255), 
+    description NVARCHAR(255), 
+    attachment NVARCHAR(100)
 );
 
 
+create table student_submits(
+    id varchar(20) default uuid() primary key,
+    course_id varchar(20),
+    student_id varchar(20),
+    attachment varchar(100),
+    is_submited boolean default false,
+    status boolean default false,
+    foreign key(course_id) references course(id) on delete cascade,
+    foreign key(student_id) references info(id) on delete cascade
+);
 
 INSERT INTO account (username, pass, is_teacher) VALUES
 ('john_doe', 'password123', false),

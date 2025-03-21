@@ -38,27 +38,27 @@ async function submitToPHP(event) {
     const image = document.getElementById('profile-picture').files[0];
     const real_name = document.getElementById('real_name').value;
     const username = document.getElementById('username').value;
-    const id = document.getElementById('id').value;
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const password = document.getElementById('password').value;
     const confirm_password = document.getElementById('re-password').value;
-
+    const is_teacher = document.getElementById('is_teacher').checked;
     const formData = new FormData();
+
+
     formData.append('real_name', real_name);
     formData.append('username', username);
-    formData.append('id', id);
     formData.append('email', email);
     formData.append('phone', phone);
     formData.append('password', password);
     formData.append('confirm_password', confirm_password);
-
+    formData.append('is_teacher', is_teacher)
     if (image) {
         formData.append('profile-picture', image);
     }
 
     try {
-        const response = await fetch('../assets/php_process/edit_utils.php', {
+        const response = await fetch('../assets/php_process/create_utils.php', {
             method: 'POST',
             body: formData,
         });

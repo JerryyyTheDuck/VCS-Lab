@@ -204,7 +204,9 @@
                                 </div>
                             </div>
                             <div class="d-flex my-4">
-                                <a class="btn btn-sm btn-primary me-3" href="edit.php">Update Profile</a>
+                                <?php
+                                    echo '<a class="btn btn-sm btn-primary me-3" href="edit.php?user='. $_SESSION['user'] .'">Update Profile</a>'
+                                ?>
                             </div>
                         </div>
                     </div>
