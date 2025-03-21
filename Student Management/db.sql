@@ -27,7 +27,7 @@ CREATE TABLE course (
 
 create table student_submits(
     id varchar(20) default uuid() primary key,
-    course_id varchar(20),
+    course_id  CHAR(36),
     student_id varchar(20),
     attachment varchar(100),
     is_submited boolean default false,

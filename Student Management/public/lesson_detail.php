@@ -76,20 +76,19 @@
             <div class="card border-0">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <!-- Task Description Section -->
                         <div class="mb-5">
                             <h4 class="mb-3 text-primary"><i class="fas fa-tasks me-2"></i> Task Description</h4>
+                            
                             <div class="bg-light p-4 rounded">
                                 <p class="mb-0"><?php echo htmlspecialchars($course['description']); ?></p>
                             </div>
                         </div>
 
-                        <!-- Attachment Section -->
                         <div>
                             <h4 class="mb-3 text-primary"><i class="fas fa-paperclip me-2"></i> Attachment</h4>
                             <div class="bg-light p-4 rounded">
                                 <?php if ($course['attachment'] != null): ?>
-                                    <a href="../courses/<?php echo htmlspecialchars($course['course_name']); ?>/<?php echo htmlspecialchars($course['attachment']); ?>" 
+                                    <a href="../assets/courses/<?php echo htmlspecialchars($course['course_name']); ?>/<?php echo htmlspecialchars($course['attachment']); ?>" 
                                        class="btn btn-outline-primary btn-sm" 
                                        download>
                                         <i class="fas fa-download me-2"></i>
@@ -110,7 +109,7 @@
             <div class="card border-0">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <div class="bg-light p-4 rounded">
+                    <table class="table table-striped table-rounded border gs-7 bg-light p-4 rounded">
                             <?php if ($_SESSION['is_teacher'] != 1): ?>
                               <form id="submit" method="post" action="../assets/php_process/lesson_utils.php" enctype="multipart/form-data">
                                   <div class="form-group row mb-4">
@@ -126,10 +125,53 @@
                                   </div>
                               </form>
                             <?php else: ?>
+                                <?php 
+                                $count = 1;
+                                $submissions = list_all_submission($course_id);
+
+                                if ($submissions->num_rows > 0) {
+                                    echo '<thead>
+                                    <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                                        <th>No</th>
+                                        <th>Full name</th>
+                                        <th>Attachment</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>';
+                                    while ($submission = $submissions->fetch_assoc()) {
+                                        $stmt = $conn->prepare("SELECT * FROM info WHERE id = ?");
+                                        if (!$stmt) {
+                                            die("Prepare failed: " . $conn->error);
+                                        }
+                                        $stmt->bind_param("s", $submission['student_id']);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
                                 
-                                <!-- For teachers, you can place any additional content here -->
+                                        if ($result->num_rows > 0) {
+                                            $student_info = $result->fetch_assoc();
+                                            $name = htmlspecialchars($student_info['real_name']); 
+                                        } else {
+                                            $name = "Unknown";
+                                        }
+                                        echo '<tr>
+                                                <td>' . $count . '</td>
+                                                <td>' . $name . '</td>
+                                                <td>
+                                                    <a href="../assets/courses/'. htmlspecialchars($course['course_name']) . "/" . htmlspecialchars($submission['attachment']) . '" class="btn btn-outline-primary btn-sm" download>
+                                                        <i class="fas fa-download me-2"></i>
+                                                        ' . htmlspecialchars($submission['attachment']) . '
+                                                    </a>
+                                                </td>
+                                              </tr>';
+                                        $count++;
+                                    }
+                                } else {
+                                    echo '<p class="mb-0 text-muted">No submission</p>';
+                                }
+                                ?>
                             <?php endif; ?>
-                        </div>
+                        </table>
+
                     </div>
                 </div>
             </div>

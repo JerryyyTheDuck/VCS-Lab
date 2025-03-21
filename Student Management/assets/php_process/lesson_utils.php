@@ -10,7 +10,7 @@
 
     $user = select_someone($_SESSION['user']);
     
-    function upload_lesson(){
+    function upload_lesson($course_name, $description){
         if (isset($_FILES['file-sample'])) {
             if($_FILES['file-sample']['error'] == 4) {
                 create_course($course_name, $description, null);
@@ -84,7 +84,7 @@
                         $file_name_new = $user['id'] . "." . $file_actual_ext;
                         $file_destination = '../courses/' . $course_name . '/' . $file_name_new;
                         move_uploaded_file($file_tmp, $file_destination);
-                        
+                        create_submission($course_id, $user['id'], $file_name_new, TRUE);
                     } else {
                         echo 'file_too_big';
                         header('Location: ../../public/lesson.php');
@@ -104,16 +104,14 @@
     }
 
 
-
-
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if($course_name == null || $description == null) {
+        if($_POST['course_name'] == null || $_POST['description'] == null) {
             upload_submission();
             header('Location: ../../public/lesson.php');
         }else{
             $course_name = $_POST['course_name'];
             $description = $_POST['description'];
-            upload_lesson();
+            upload_lesson($course_name, $description);
             header('Location: ../../public/lesson.php');
         }
     }

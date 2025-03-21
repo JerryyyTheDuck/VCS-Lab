@@ -44,17 +44,25 @@ async function submitToPHP(event) {
         }
 
         const data = await response.json().text; 
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Upload Successful',
-            text: 'Your file has been submitted.',
-            confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `lesson.php`;
-            }
-        });
+        switch (data) {
+            case 'upload_error':
+                showError('An error occurred while uploading your file.');
+            case 'invalid_file_type':
+                showError('Invalid file type.');
+            case 'file_too_big':
+                showError('File is too big.');
+            default:
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Upload Successful',
+                    text: 'Your file has been submitted.',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `lesson.php`;
+                    }
+                });
+        }
 
     } catch (error) {
         console.error('Error:', error);

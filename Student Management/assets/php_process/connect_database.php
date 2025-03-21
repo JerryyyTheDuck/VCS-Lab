@@ -158,8 +158,61 @@ function get_course($id){
     }
 }
 
-function create_submission(){
-    
+function create_submission($courseID, $studentID, $attachment){
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM student_submits WHERE course_id = ? AND student_id = ?");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+    $stmt->bind_param("ss", $courseID, $studentID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows == 0){
+        $stmt = $conn->prepare("INSERT INTO student_submits (course_id, student_id, attachment) VALUES (?, ?, ?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("sss", $courseID, $studentID, $attachment);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            die("Execute failed: " . $stmt->error);
+        }
+    }else{
+        $stmt = $conn->prepare("UPDATE student_submits SET attachment = ? WHERE course_id = ? AND student_id = ?");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("sss", $attachment, $courseID, $studentID);
+        $original = explode('.',$result->fetch_assoc()['attachment']);
+        $directory = "../courses/" . get_course($courseID)['course_name'] . "/";
+        $pattern = $directory . $original[0] . "*";
+        $files = glob($pattern);
+        foreach($files as $file){
+            if($file != $directory.$original[0].".".$original[1]){
+                unlink($file);
+            }
+        }
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            die("Execute failed: " . $stmt->error);
+        }
+    }
 }
+
+
+function list_all_submission($courseID){
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM student_submits WHERE course_id = ?");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+    $stmt->bind_param("s", $courseID);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
 
 ?>
