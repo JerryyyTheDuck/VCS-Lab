@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CSS Gallery</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:600,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/home.css">
+</head>
+
+<body>
+    <div class="button-container">
+        <form action="{{ url_for('upload_image') }}" method="GET" class="inline-form">
+            <button type="submit">Upload</button>
+        </form>
+    
+        <form action="{{ url_for('logout') }}" method="GET" class="inline-form">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <p class="heading">Welcome back, {{user}}</p>
+
+    <div class="gallery-image">
+        {% for image in images %}
+        <div class="img-box">
+            <img src="{{ url_for('tmp_file', filename=image) }}" alt="{{ image }}" />
+            <div class="transparent-box">
+                <div class="caption">
+                    <p>{{ image }}</p>
+                    <p class="opacity-low">Uploaded Image</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: Raleway;
+    background-color: #202125;
+}
+.heading {
+    text-align: center;
+    font-size: 2.0em;
+    letter-spacing: 1px;
+    padding: 40px;
+    color: white;
+}
+.gallery-image {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.gallery-image img {
+    height: 250px;
+    width: 350px;
+    transform: scale(1.0);
+    transition: transform 0.4s ease;
+}
+.img-box {
+    box-sizing: content-box;
+    margin: 10px;
+    height: 250px;
+    width: 350px;
+    overflow: hidden;
+    display: inline-block;
+    color: white;
+    position: relative;
+    background-color: white;
+}
+.caption {
+    position: absolute;
+    bottom: 5px;
+    left: 20px;
+    opacity: 0.0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.transparent-box {
+    height: 250px;
+    width: 350px;
+    background-color:rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: background-color 0.3s ease;
+}
+.img-box:hover img {
+    transform: scale(1.1);
+}
+.img-box:hover .transparent-box {
+    background-color:rgba(0, 0, 0, 0.5);
+}
+.img-box:hover .caption {
+    transform: translateY(-20px);
+    opacity: 1.0;
+}
+.img-box:hover {
+    cursor: pointer;
+}
+.caption > p:nth-child(2) {
+    font-size: 0.8em;
+}
+.opacity-low {
+    opacity: 0.5;
+}
+.logout-form {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+}
+.logout-form button {
+    background-color: #ff4b5c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.logout-form button:hover {
+    background-color: #d63a4a;
+    transform: scale(1.05);
+}
+.logout-form button:active {
+    background-color: #b82f3f;
+    transform: scale(0.98);
+}
+
+.button-container {
+    display: flex; /* Use flexbox to align items in a row */
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Add space between the buttons */
+    padding: 20px; /* Add padding for spacing */
+}
+
+.inline-form {
+    margin: 0; /* Remove default margin */
+}
+
+.inline-form button {
+    background-color: #ff4b5c; /* Red background color */
+    color: white; /* White text color */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    padding: 10px 20px; /* Padding inside the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.inline-form button:hover {
+    background-color: #d63a4a; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+.inline-form button:active {
+    background-color: #b82f3f; /* Even darker red on click */
+    transform: scale(0.98); /* Slightly scale down on click */
+}
