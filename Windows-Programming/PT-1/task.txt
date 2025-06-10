@@ -1,0 +1,1 @@
+Mô phỏng lệnh dir, khi dùng -s liệt kê được sub dir

@@ -1,0 +1,1 @@
+Mô phỏng tasks manager, liệt kê cả parent id và parent process name
