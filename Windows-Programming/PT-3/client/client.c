@@ -2,12 +2,9 @@
 #include <stdio.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <pthread.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#define IP "0.tcp.ap.ngrok.io"
-#define PORT_STR "14179"
 #define BUF_SIZE 1024
 
 bool running = true;
@@ -41,12 +38,13 @@ int main(int argc, char *argv[]) {
     WSADATA wsaData;
     int iResult;
 
-    if (argc < 2 || argc > 3) {
-        printf("Usage: %s <your name>\n", argv[0]);
+    if (argc < 4 || argc > 5) {
+        printf("Usage: %s <IP> <port> <your name>\n", argv[0]);
         return 0;
     }
-
-    char *username = argv[1];
+    char* ip = argv[1];
+    char* port = argv[2];
+    char *username = argv[3];
 
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
@@ -61,7 +59,7 @@ int main(int argc, char *argv[]) {
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
-    iResult = getaddrinfo(IP, PORT_STR, &hints, &result);
+    iResult = getaddrinfo(ip, port, &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed: %s\n", gai_strerror(iResult));
         WSACleanup();
