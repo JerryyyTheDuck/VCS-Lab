@@ -2,3 +2,61 @@
 **/cmake-build-debug/
 **/.clang-tidy
 **/CMakeLists.txt
+
+
+# Ignore everything
+*
+
+# But not these files
+!*.c
+!*.cpp
+
+# Allow folders (needed so !*.c in subfolders works)
+!*/
+
+# Ignore build and VS generated files
+*.obj
+*.exe
+*.dll
+*.pdb
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.sdf
+*.suo
+*.user
+*.vcxproj*
+*.vcproj*
+*.vcdb
+*.opensdf
+*.log
+*.tlog
+*.lastbuildstate
+*.cache
+*.ilk
+*.iobj
+*.ipdb
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+*.dbmdl
+*.dbproj.schemaview
+*.sln
+*.suo
+*.user
+*.VC.db
+*.VC.opendb
+*.Browse.VC.db
+
+# Ignore folders
+/.vs/
+/Debug/
+/Release/
+/x64/
+/ipch/
+/out/
+/bin/
+/obj/
+/build/
