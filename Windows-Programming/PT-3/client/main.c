@@ -10,7 +10,7 @@
 bool running = true;
 
 
-void* receive_messages(void* arg) {
+DWORD WINAPI  receive_messages(void* arg) {
     SOCKET connectionSocket = *(SOCKET*)arg;
     char recvbuf[BUF_SIZE];
     int iResult;
@@ -31,7 +31,7 @@ void* receive_messages(void* arg) {
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -96,13 +96,14 @@ int main(int argc, char *argv[]) {
     }
 
     HANDLE recv_thread;
-    if (CreateThread(NULL, 0, receive_messages, &connectionSocket, 0, &recv_thread) == NULL) {
+    DWORD threadId;
+    recv_thread = CreateThread(NULL, 0, receive_messages, &connectionSocket, 0, &threadId);
+    if (recv_thread == NULL) {
         printf("Failed to create receive thread.\n");
         closesocket(connectionSocket);
         WSACleanup();
         return 1;
     }
-    CloseHandle(recv_thread);
 
     char sendbuf[BUF_SIZE];
     do {

