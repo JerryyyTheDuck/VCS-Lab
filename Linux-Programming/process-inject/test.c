@@ -13,6 +13,9 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <libgen.h>
+#include <sys/ptrace.h>
+#include <sys/wait.h>
+#include <sys/user.h>
 
 unsigned long findStartAddress(int pid) {
 
@@ -130,12 +133,62 @@ int main(int argc, char *argv[]) {
     }
     printf("[+] Address of __libc_dlopen_mode in target process: 0x%lx\n", function_address);
 
-    ulong offset = function_address - start_address;
+    unsigned long offset = function_address - start_address;
     
-    printf("[+] Length of offset%ld");
+    printf("[+] Length of offset: %lu\n", offset);
 
+    // Attach to the target process
+    if(ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
+        perror("[-] PTRACE_ATTACH failed");
+        free(orginal_libc_name);
+        free(target_libc_name);
+        return 1;
+    }
+    wait(NULL);
 
+    printf("[+] Attached to process %d\n", pid);
+    
+    // Get registers
+    struct user_regs_struct regs;
+    if(ptrace(PTRACE_GETREGS, pid, NULL, &regs) == -1) {
+        perror("[-] PTRACE_GETREGS failed");
+        ptrace(PTRACE_DETACH, pid, NULL, NULL);
+        free(orginal_libc_name);
+        free(target_libc_name);
+        return 1;
+    }
+    printf("[+] Successfully retrieved registers from process %d\n", pid);
+    printf("RIP = 0x%llx\n", regs.rip);
 
+    // Calculate target function address in victim process
+    unsigned long target_function_addr = start_address + offset;
+    printf("[+] Target function address in victim process: 0x%lx\n", target_function_addr);
+
+    // Set RIP to point to our target function
+    regs.rip = target_function_addr;
+    if(ptrace(PTRACE_SETREGS, pid, NULL, &regs) == -1) {
+        perror("[-] PTRACE_SETREGS failed");
+        ptrace(PTRACE_DETACH, pid, NULL, NULL);
+        free(orginal_libc_name);
+        free(target_libc_name);
+        return 1;
+    }
+
+    printf("[+] Set RIP to target function address\n");
+
+    // Continue execution
+    if(ptrace(PTRACE_CONT, pid, NULL, NULL) == -1) {
+        perror("[-] PTRACE_CONT failed");
+        ptrace(PTRACE_DETACH, pid, NULL, NULL);
+        free(orginal_libc_name);
+        free(target_libc_name);
+        return 1;
+    }
+    printf("[+] Process %d continued execution\n", pid);
+
+    // Cleanup
+    free(orginal_libc_name);
+    free(target_libc_name);
 
     return 0;
 }

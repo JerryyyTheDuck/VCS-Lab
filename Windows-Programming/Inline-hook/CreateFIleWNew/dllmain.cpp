@@ -59,9 +59,9 @@ void* allocatePageNearAddress(void* targetAddr)
 
 void writeAbsoluteJump(void* memory, void* addrToJumpTo) {
     BYTE jumpTo[] = {
-        0x48, 0xB8,
-        0,0,0,0,0,0,0,0,
-        0xFF, 0xE0
+		0x48, 0xB8,                         //mov rax
+		0,0,0,0,0,0,0,0,                    // 8 byte address to jump to
+		0xFF, 0xE0                          // jmp rax
     };
     memcpy(&jumpTo[2], &addrToJumpTo, sizeof(addrToJumpTo));
     memcpy(memory, jumpTo, sizeof(jumpTo));
